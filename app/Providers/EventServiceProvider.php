@@ -18,6 +18,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        AchievementUnlocked::class => [
+            AchievementUnlockedListener::class,
+        ],
+        BadgeUnlocked::class => [
+            BadgeUnlockedListener::class,
+        ],
     ];
 
     /**
