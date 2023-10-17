@@ -9,8 +9,8 @@ class CreateBadgesTable extends Migration
     {
         Schema::create('badges', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description')->nullable();
+            $table->string('name')->required();
+            $table->string('required_achievements')->required();
             // Add any other fields specific to badges.
             $table->timestamps();
         });
