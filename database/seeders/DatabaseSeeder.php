@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         Lesson::factory()->count(50)->create(); 
-        Comment::factory()->count(5)->create();
+        
         User::factory()->count(5)->create();
         DB::table('achievements')->insert($achievementsData);
         DB::table('badges')->insert($badgesData); 
