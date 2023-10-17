@@ -11,6 +11,10 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Events\AchievementUnlocked;
 use App\Events\BadgeUnlocked;
 
+use App\Models\Achievement;
+use App\Models\Badge;
+
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -128,8 +132,6 @@ class User extends Authenticatable
     public function getNextAvailableAchievements()
     {
         // Logic to fetch the next available achievements for the user.
-        // Example: If the user has unlocked "First Lesson Watched" and "First Comment Written,"
-        // the next available achievements are "5 Lessons Watched" and "3 Comments Written."
         $unlockedAchievements = $this->achievements->pluck('name')->toArray();
 
         $nextAvailableAchievements = Achievement::whereNotIn('name', $unlockedAchievements)->pluck('name')->toArray();
@@ -149,7 +151,7 @@ class User extends Authenticatable
         // Logic to fetch the next badge for the user.
         $badge = $this->badges->first();
         if (!$badge) {
-            return 'Beginner';
+            return 'Intermediate';
         }
 
         $badgeNames = Badge::pluck('name')->toArray();
@@ -165,16 +167,16 @@ class User extends Authenticatable
         $achievementCount = 0;
         if ($this->achievements !== null) {
             $achievementCount = $this->achievements->count();
-        } else {
-            // Handle the case where achievements is null
         }
         $nextBadge = $this->getNextBadge();
 
         if (!$nextBadge) {
             return 0; // User has already unlocked the highest badge.
         }
-        return 0;
-        $nextBadgeAchievementCount = Badge::where('name', $nextBadge)->first()->achievements->count();
-        return $nextBadgeAchievementCount - $achievementCount;
+        
+        $nextBadgeModel = Badge::where('name', $nextBadge)->first(); 
+        $existingAchievements = $this->achievements->count(); 
+        
+        return  $nextBadgeModel->required_achievements - $existingAchievements;
     }
 }
